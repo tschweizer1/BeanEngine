@@ -11,16 +11,14 @@ Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y)
     SDL_Surface* loadedSurface = IMG_Load(Sprite::filename);
     if (!loadedSurface) {
         std::cout << "Failed to load sprite!" << std::endl;
-        SDL_DestroyRenderer(renderer);
-        SDL_Quit();
+        Quit();
         return;
     }
     spriteTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
     if (!spriteTexture) {
         std::cout << "Failed to create texture!" << std::endl;
         SDL_DestroySurface(loadedSurface);
-        SDL_DestroyRenderer(renderer);
-        SDL_Quit();
+        Quit();
         return;
     }
     spriteRect = new SDL_FRect{
