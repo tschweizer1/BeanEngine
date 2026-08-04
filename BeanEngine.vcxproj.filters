@@ -27,6 +27,9 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -38,7 +41,7 @@
     <ClInclude Include="Sprite.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Settings.h">
+    <ClInclude Include="Global.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,18 +1,12 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include "SDL3/SDL.h"
 #include "SDL3/SDL_main.h"
 #include "SDL3_image/SDL_image.h"
 #include "Sprite.h"
 
-SDL_Window* gSDLWindow;
-SDL_Renderer* gSDLRenderer;
-SDL_Texture* gSDLTexture;
 int* gFrameBuffer;
 int* gTempBuffer;
-const double FPS = 60;
-static int gDone;
 Sprite *ball;
 
 
@@ -21,7 +15,7 @@ Sprite *ball;
 bool update()
 {
     SDL_Event e;
-    if (SDL_PollEvent(&e))
+    if (Done == 1 || SDL_PollEvent(&e))
     {
         if (e.type == SDL_EVENT_QUIT)
         {
@@ -35,14 +29,14 @@ bool update()
     char* pix;
     int pitch;
 
-    SDL_LockTexture(gSDLTexture, NULL, (void**)&pix, &pitch);
+    SDL_LockTexture(GameTexture, NULL, (void**)&pix, &pitch);
     for (int i = 0, sp = 0, dp = 0; i < WINDOW_HEIGHT; i++, dp += WINDOW_WIDTH, sp += pitch)
         memcpy(pix + sp, gFrameBuffer + dp, WINDOW_WIDTH * 4);
 
-    SDL_UnlockTexture(gSDLTexture);
-    SDL_RenderTexture(gSDLRenderer, gSDLTexture, NULL, NULL);
-    SDL_RenderTexture(gSDLRenderer, ball->getTexture(), nullptr, ball->getRect());
-    SDL_RenderPresent(gSDLRenderer);
+    SDL_UnlockTexture(GameTexture);
+    SDL_RenderTexture(GameRenderer, GameTexture, NULL, NULL);
+    SDL_RenderTexture(GameRenderer, ball->getTexture(), nullptr, ball->getRect());
+    SDL_RenderPresent(GameRenderer);
     SDL_Delay(1000/FPS);
     return true;
 }
@@ -60,10 +54,7 @@ void init()
             gFrameBuffer[i * WINDOW_WIDTH + j] = 0xffffffff;
         }
     }
-    ball = new Sprite("ball.png", gSDLRenderer, 100, 100);
-    
-    
-    //std::cout << SDL_RenderPresent(gSDLRenderer) << std::endl;
+    ball = new Sprite("ball", GameRenderer, 100, 100);
 }
 
 void render(Uint64 aTicks)
@@ -75,7 +66,7 @@ void loop()
 {
     if (!update())
     {
-        gDone = 1;
+        Done = 1;
     }
     else
     {
@@ -91,22 +82,17 @@ int main(int argc, char** argv)
     }
 
     gFrameBuffer = new int[WINDOW_WIDTH * WINDOW_HEIGHT];
-    gSDLWindow = SDL_CreateWindow("How peculiar", WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-    gSDLRenderer = SDL_CreateRenderer(gSDLWindow, NULL);
-    gSDLTexture = SDL_CreateTexture(gSDLRenderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, WINDOW_WIDTH, WINDOW_HEIGHT);
+    
 
-    if (!gFrameBuffer || !gSDLWindow || !gSDLRenderer || !gSDLTexture)
+    if (!gFrameBuffer || !GameWindow || !GameRenderer || !GameTexture)
         return -1;
     init();
-    gDone = 0;
+    Done = 0;
 
-    while (!gDone) {
+    while (!Done) {
         loop();
     }
-    SDL_DestroyTexture(gSDLTexture);
-    SDL_DestroyRenderer(gSDLRenderer);
-    SDL_DestroyWindow(gSDLWindow);
-    SDL_Quit();
+    Quit();
 
     return 0;
 }
