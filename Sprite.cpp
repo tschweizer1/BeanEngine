@@ -27,9 +27,33 @@ Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y)
     static_cast<float>(loadedSurface->w),
     static_cast<float>(loadedSurface->h)
     };
+    layer = 0;
     SDL_DestroySurface(loadedSurface);
 }
-
+Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y, int layer) {
+    filename = FileNameIn.c_str();
+    SDL_Surface* loadedSurface = IMG_Load(Sprite::filename);
+    if (!loadedSurface) {
+        std::cout << "Failed to load sprite!" << std::endl;
+        Quit();
+        return;
+    }
+    spriteTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+    if (!spriteTexture) {
+        std::cout << "Failed to create texture!" << std::endl;
+        SDL_DestroySurface(loadedSurface);
+        Quit();
+        return;
+    }
+    spriteRect = new SDL_FRect{
+    x,
+    y,
+    static_cast<float>(loadedSurface->w),
+    static_cast<float>(loadedSurface->h)
+    };
+    Sprite::layer = layer;
+    SDL_DestroySurface(loadedSurface);
+}
 Sprite::~Sprite() {
     
 }

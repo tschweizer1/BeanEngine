@@ -9,6 +9,7 @@ class Sprite {
 
 public:
 	Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y);
+	Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y, int layer);
 	Sprite();
 	~Sprite();
 	void LoadSprite();
@@ -21,6 +22,7 @@ private:
 	const char* filename;
 	SDL_Texture* spriteTexture;
 	SDL_FRect* spriteRect;
+	int layer;
 }
 #endif
 ;
