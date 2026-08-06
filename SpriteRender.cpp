@@ -14,6 +14,15 @@ void SpriteRender::RenderSprites() {
 }
 
 void SpriteRender::addSpriteToRender(Sprite* s) {
-	spriteList->push_back(s);
-	std::cout << spriteList << std::endl;
+	
+	std::list<Sprite*>::iterator it = spriteList->begin();
+	for (Sprite* sprite : *spriteList) {
+		if (sprite->getLayer() > s->getLayer()) {
+			break;
+		}
+		else {
+			it++;
+		}
+	}
+	spriteList->insert(it, s);
 }

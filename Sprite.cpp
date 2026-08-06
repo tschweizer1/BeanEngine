@@ -7,8 +7,8 @@ Sprite::Sprite() {
 }
 Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y) {
 
-	filename = FileNameIn.c_str();
-    SDL_Surface* loadedSurface = IMG_Load(Sprite::filename);
+	filename = FileNameIn;
+    SDL_Surface* loadedSurface = IMG_Load(Sprite::filename.c_str());
     if (!loadedSurface) {
         std::cout << "Failed to load sprite!" << std::endl;
         Quit();
@@ -31,8 +31,8 @@ Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y)
     SDL_DestroySurface(loadedSurface);
 }
 Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y, int layer) {
-    filename = FileNameIn.c_str();
-    SDL_Surface* loadedSurface = IMG_Load(Sprite::filename);
+    filename = FileNameIn;
+    SDL_Surface* loadedSurface = IMG_Load(Sprite::filename.c_str());
     if (!loadedSurface) {
         std::cout << "Failed to load sprite!" << std::endl;
         Quit();
@@ -57,6 +57,9 @@ Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y,
 Sprite::~Sprite() {
     
 }
+std::string Sprite::toString() {
+    return (filename);
+}
 void Sprite::LoadSprite() {
     
 }
@@ -73,12 +76,15 @@ void Sprite::SetSpritePosition(float x, float y) {
     spriteRect->y = y;
     if (spriteRect->x < 0.0f) spriteRect->x = 0.0f;
     if (spriteRect->y < 0.0f) spriteRect->y = 0.0f;
-    if (spriteRect->x + spriteRect->w > 800.0f) spriteRect->x = 800.0f - spriteRect->w;
-    if (spriteRect->y + spriteRect->h > 600.0f) spriteRect->y = 600.0f - spriteRect->h;
+    if (spriteRect->x + spriteRect->w > WINDOW_WIDTH) spriteRect->x = WINDOW_WIDTH - spriteRect->w;
+    if (spriteRect->y + spriteRect->h > WINDOW_HEIGHT) spriteRect->y = WINDOW_HEIGHT - spriteRect->h;
 }
 SDL_Texture* Sprite::getTexture() {
     return spriteTexture;
 }
 SDL_FRect* Sprite::getRect() {
     return spriteRect;
+}
+int Sprite::getLayer() {
+    return layer;
 }

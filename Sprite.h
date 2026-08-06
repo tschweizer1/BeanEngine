@@ -12,14 +12,16 @@ public:
 	Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y, int layer);
 	Sprite();
 	~Sprite();
+	std::string toString();
 	void LoadSprite();
 	void MoveSprite(float x, float y);
 	void SetSpritePosition(float x, float y);
 	SDL_Texture* getTexture();
 	SDL_FRect* getRect();
+	int getLayer();
 
 private:
-	const char* filename;
+	std::string filename;
 	SDL_Texture* spriteTexture;
 	SDL_FRect* spriteRect;
 	int layer;
