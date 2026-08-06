@@ -9,6 +9,7 @@ int* gFrameBuffer;
 int* gTempBuffer;
 Sprite* ball;
 Sprite* ball2;
+Sprite* ball3;
 SpriteRender* SpriteRenderer;
 
 
@@ -57,10 +58,12 @@ void init()
         }
     }
     SpriteRenderer = new SpriteRender();
-    ball = new Sprite("ball.png", GameRenderer, 100, 100);
+    ball = new Sprite("ball.png", GameRenderer, 100, 100, 0);
     SpriteRenderer->addSpriteToRender(ball);
-    ball2 = new Sprite("ball.png", GameRenderer, 500, 200);
+    ball2 = new Sprite("ball2.png", GameRenderer, 500, 200, 1);
     SpriteRenderer->addSpriteToRender(ball2);
+    ball3 = new Sprite("ball3.png", GameRenderer, 500, 200, 0);
+    SpriteRenderer->addSpriteToRender(ball3);
 }
 
 void render(Uint64 aTicks)
