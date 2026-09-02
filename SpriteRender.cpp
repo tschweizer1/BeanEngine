@@ -6,14 +6,21 @@ SpriteRender::SpriteRender(SDL_Texture* texture) {
 }
 SpriteRender::~SpriteRender() {
 
+	for (Sprite* s : *spriteList) {
+		delete s;
+	}
+	delete spriteList;
 }
 
-void SpriteRender::RenderSprites() {
+void SpriteRender::RenderSprites(Camera* camera) {
 	SDL_SetRenderTarget(GameRenderer, targetTexture);
 	for (Sprite* s : *spriteList) {
-		SDL_RenderTexture(GameRenderer, s->getTexture(), NULL, s->getRect());
+		if (camera->containsSprite(s->getRect())) {
+			SDL_RenderTexture(GameRenderer, s->getTexture(), NULL, s->getRect());
+		}
 	}
 	SDL_SetRenderTarget(GameRenderer, NULL);
+	camera->renderCameraView();
 }
 
 void SpriteRender::addSpriteToRender(Sprite* s) {

@@ -5,7 +5,6 @@
 #include "SDL3_image/SDL_image.h"
 #include "Sprite.h"
 #include "SpriteRender.h"
-#include "Camera.h"
 int* gFrameBuffer;
 int* gTempBuffer;
 Sprite* ball;
@@ -13,6 +12,8 @@ Sprite* ball2;
 Sprite* ball3;
 SpriteRender* SpriteRenderer;
 Camera* camera;
+SDL_FRect* cameraBounds;
+SDL_Rect* screenBounds;
 
 
 
@@ -34,14 +35,15 @@ bool update()
     char* pix;
     int pitch;
     
-    SDL_LockTexture(GameTexture, NULL, (void**)&pix, &pitch);
-    for (int i = 0, sp = 0, dp = 0; i < TEXTURE_HEIGHT; i++, dp += TEXTURE_WIDTH, sp += pitch)
-        memcpy(pix + sp, gFrameBuffer + dp, TEXTURE_WIDTH * 4);
+    screenBounds->x = cameraBounds->x;
+    screenBounds->y = cameraBounds->y;
+    SDL_LockTexture(GameTexture, screenBounds, (void**)&pix, &pitch);
+    for (int i = 0, sp = 0, dp = 0; i < cameraBounds->h; i++, dp += cameraBounds->w, sp += pitch)
+        memcpy(pix + sp, gFrameBuffer + dp, cameraBounds->w * 4);
 
     SDL_UnlockTexture(GameTexture);
     SDL_RenderTexture(GameRenderer, GameTexture, NULL, NULL);
-    SpriteRenderer->RenderSprites();
-    camera->renderCameraView();
+    SpriteRenderer->RenderSprites(camera);
     SDL_RenderPresent(GameRenderer);
     SDL_Delay(1000/FPS);
     return true;
@@ -50,17 +52,21 @@ bool update()
 //initializes the screen to all white
 void init()
 {
+    camera = new Camera(GameTexture);
+    cameraBounds = camera->getRect();
+    screenBounds = new SDL_Rect();
+    screenBounds->w = cameraBounds->w;
+    screenBounds->h = cameraBounds->h;
     int x, y, n;
-
+    int width = cameraBounds->w;
     int i, j;
-    for (i = 0; i < TEXTURE_HEIGHT; i++)
+    for (i = cameraBounds->y; i < cameraBounds->y + cameraBounds->h; i++)
     {
-        for (j = 0; j < TEXTURE_WIDTH; j++)
+        for (j = cameraBounds->x; j < cameraBounds->x + cameraBounds->w; j++)
         {
-            gFrameBuffer[i * TEXTURE_WIDTH + j] = 0xffffffff;
+            gFrameBuffer[i * width + j] = 0xffffffff;
         }
     }
-    camera = new Camera(GameTexture);
     SpriteRenderer = new SpriteRender(GameTexture);
     ball = new Sprite("ball.png", GameRenderer, 100, 100, 0);
     SpriteRenderer->addSpriteToRender(ball);
@@ -72,9 +78,7 @@ void init()
 
 void render(Uint64 aTicks)
 {
-    ball->MoveSprite(0.001 * aTicks, 0.001 * aTicks);
-    ball2->MoveSprite(0.001 * aTicks, 0.001 * aTicks);
-    camera->moveCamera(0.001 * aTicks, 0.001 * aTicks);
+    
 }
 
 void loop()

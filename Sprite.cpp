@@ -55,7 +55,7 @@ Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y,
     SDL_DestroySurface(loadedSurface);
 }
 Sprite::~Sprite() {
-    
+    delete spriteRect;
 }
 std::string Sprite::toString() {
     return (filename);

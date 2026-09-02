@@ -6,6 +6,8 @@ public:
 	~Camera();
 	void moveCamera(float x, float y);
 	void renderCameraView();
+	bool containsSprite(SDL_FRect* spriteRect);
+	SDL_FRect* getRect();
 private:
 	SDL_FRect* copyRect;
 	SDL_Texture* targetTexture;
