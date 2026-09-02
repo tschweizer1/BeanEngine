@@ -5,12 +5,14 @@
 #include "SDL3_image/SDL_image.h"
 #include "Sprite.h"
 #include "SpriteRender.h"
+#include "Camera.h"
 int* gFrameBuffer;
 int* gTempBuffer;
 Sprite* ball;
 Sprite* ball2;
 Sprite* ball3;
 SpriteRender* SpriteRenderer;
+Camera* camera;
 
 
 
@@ -31,14 +33,15 @@ bool update()
     }
     char* pix;
     int pitch;
-
+    
     SDL_LockTexture(GameTexture, NULL, (void**)&pix, &pitch);
-    for (int i = 0, sp = 0, dp = 0; i < WINDOW_HEIGHT; i++, dp += WINDOW_WIDTH, sp += pitch)
-        memcpy(pix + sp, gFrameBuffer + dp, WINDOW_WIDTH * 4);
+    for (int i = 0, sp = 0, dp = 0; i < TEXTURE_HEIGHT; i++, dp += TEXTURE_WIDTH, sp += pitch)
+        memcpy(pix + sp, gFrameBuffer + dp, TEXTURE_WIDTH * 4);
 
     SDL_UnlockTexture(GameTexture);
     SDL_RenderTexture(GameRenderer, GameTexture, NULL, NULL);
     SpriteRenderer->RenderSprites();
+    camera->renderCameraView();
     SDL_RenderPresent(GameRenderer);
     SDL_Delay(1000/FPS);
     return true;
@@ -50,14 +53,15 @@ void init()
     int x, y, n;
 
     int i, j;
-    for (i = 0; i < WINDOW_HEIGHT; i++)
+    for (i = 0; i < TEXTURE_HEIGHT; i++)
     {
-        for (j = 0; j < WINDOW_WIDTH; j++)
+        for (j = 0; j < TEXTURE_WIDTH; j++)
         {
-            gFrameBuffer[i * WINDOW_WIDTH + j] = 0xffffffff;
+            gFrameBuffer[i * TEXTURE_WIDTH + j] = 0xffffffff;
         }
     }
-    SpriteRenderer = new SpriteRender();
+    camera = new Camera(GameTexture);
+    SpriteRenderer = new SpriteRender(GameTexture);
     ball = new Sprite("ball.png", GameRenderer, 100, 100, 0);
     SpriteRenderer->addSpriteToRender(ball);
     ball2 = new Sprite("ball2.png", GameRenderer, 500, 200, 1);
@@ -70,6 +74,7 @@ void render(Uint64 aTicks)
 {
     ball->MoveSprite(0.001 * aTicks, 0.001 * aTicks);
     ball2->MoveSprite(0.001 * aTicks, 0.001 * aTicks);
+    camera->moveCamera(0.001 * aTicks, 0.001 * aTicks);
 }
 
 void loop()
@@ -91,7 +96,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    gFrameBuffer = new int[WINDOW_WIDTH * WINDOW_HEIGHT];
+    gFrameBuffer = new int[TEXTURE_WIDTH * TEXTURE_HEIGHT];
     
 
     if (!gFrameBuffer || !GameWindow || !GameRenderer || !GameTexture)

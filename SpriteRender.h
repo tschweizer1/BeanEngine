@@ -7,13 +7,14 @@
 class SpriteRender {
 
 public:
-	SpriteRender();
+	SpriteRender(SDL_Texture* texture);
 	~SpriteRender();
 	void RenderSprites();
 	void addSpriteToRender(Sprite* s);
 
 private:
 	std::list<Sprite*>* spriteList;
+	SDL_Texture* targetTexture;
 }
 
 

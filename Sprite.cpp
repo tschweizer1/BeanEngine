@@ -68,16 +68,16 @@ void Sprite::MoveSprite(float x, float y) {
     spriteRect->y += y;
     if (spriteRect->x < 0.0f) spriteRect->x = 0.0f;
     if (spriteRect->y < 0.0f) spriteRect->y = 0.0f;
-    if (spriteRect->x + spriteRect->w > WINDOW_WIDTH) spriteRect->x = WINDOW_WIDTH - spriteRect->w;
-    if (spriteRect->y + spriteRect->h > WINDOW_HEIGHT) spriteRect->y = WINDOW_HEIGHT - spriteRect->h;
+    if (spriteRect->x + spriteRect->w > WINDOW_WIDTH) spriteRect->x = TEXTURE_WIDTH - spriteRect->w;
+    if (spriteRect->y + spriteRect->h > TEXTURE_HEIGHT) spriteRect->y = TEXTURE_HEIGHT - spriteRect->h;
 }
 void Sprite::SetSpritePosition(float x, float y) {
     spriteRect->x = x;
     spriteRect->y = y;
     if (spriteRect->x < 0.0f) spriteRect->x = 0.0f;
     if (spriteRect->y < 0.0f) spriteRect->y = 0.0f;
-    if (spriteRect->x + spriteRect->w > WINDOW_WIDTH) spriteRect->x = WINDOW_WIDTH - spriteRect->w;
-    if (spriteRect->y + spriteRect->h > WINDOW_HEIGHT) spriteRect->y = WINDOW_HEIGHT - spriteRect->h;
+    if (spriteRect->x + spriteRect->w > TEXTURE_WIDTH) spriteRect->x = TEXTURE_WIDTH - spriteRect->w;
+    if (spriteRect->y + spriteRect->h > TEXTURE_HEIGHT) spriteRect->y = TEXTURE_HEIGHT - spriteRect->h;
 }
 SDL_Texture* Sprite::getTexture() {
     return spriteTexture;
