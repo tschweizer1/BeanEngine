@@ -57,7 +57,6 @@ void init()
     screenBounds = new SDL_Rect();
     screenBounds->w = cameraBounds->w;
     screenBounds->h = cameraBounds->h;
-    int x, y, n;
     int width = cameraBounds->w;
     int i, j;
     for (i = cameraBounds->y; i < cameraBounds->y + cameraBounds->h; i++)
@@ -74,11 +73,13 @@ void init()
     SpriteRenderer->addSpriteToRender(ball2);
     ball3 = new Sprite("ball3.png", GameRenderer, 500, 200, 0);
     SpriteRenderer->addSpriteToRender(ball3);
+    std::cout << "bello" << std::endl;
 }
 
 void render(Uint64 aTicks)
 {
-    
+    camera->moveCamera(1, 1);
+    ball->MoveSprite(1, 1);
 }
 
 void loop()
@@ -95,15 +96,21 @@ void loop()
 
 int main(int argc, char** argv)
 {
+    
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
     {
+        std::cout << "big failure with sdl" << std::endl;
         return -1;
     }
 
     gFrameBuffer = new int[TEXTURE_WIDTH * TEXTURE_HEIGHT];
     
-
+    if (!GameTexture) {
+        std::cout << "no renderer" << std::endl;
+        return -1;
+    }
     if (!gFrameBuffer || !GameWindow || !GameRenderer || !GameTexture)
+        std::cout << "failure to create something important (texture, renderer, etc)" << std::endl;
         return -1;
     init();
     Done = 0;
@@ -111,6 +118,9 @@ int main(int argc, char** argv)
     while (!Done) {
         loop();
     }
+    delete camera;
+    delete screenBounds;
+    delete SpriteRenderer;
     Quit();
 
     return 0;

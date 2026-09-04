@@ -3,8 +3,7 @@
 
 SDL_Window* GameWindow = SDL_CreateWindow("How peculiar", WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 SDL_Renderer* GameRenderer = SDL_CreateRenderer(GameWindow, NULL);
-SDL_Texture* GameTexture = SDL_CreateTexture(GameRenderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, TEXTURE_WIDTH, TEXTURE_HEIGHT);
-SDL_Texture* BlankTexture = SDL_CreateTexture(GameRenderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+SDL_Texture* GameTexture = SDL_CreateTexture(GameRenderer, SDL_PIXELFORMAT_ABGR8888, (SDL_TEXTUREACCESS_STREAMING | SDL_TEXTUREACCESS_TARGET), TEXTURE_WIDTH, TEXTURE_HEIGHT);
 
 void Quit() {
     std::cout << "Quitting" << std::endl;
@@ -12,5 +11,5 @@ void Quit() {
     SDL_DestroyRenderer(GameRenderer);
     SDL_DestroyWindow(GameWindow);
     SDL_Quit();
-    std::exit(EXIT_FAILURE);
+    std::exit(0);
 }

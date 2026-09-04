@@ -4,8 +4,8 @@
 
 const int WINDOW_WIDTH = 1920 / 2;
 const int WINDOW_HEIGHT = 1080 / 2;
-const int TEXTURE_WIDTH = 10000;
-const int TEXTURE_HEIGHT = 10000;
+const int TEXTURE_WIDTH = 1920/2;
+const int TEXTURE_HEIGHT = 1080/2;
 const double FPS = 60;
 static int Done;
 extern SDL_Window* GameWindow;

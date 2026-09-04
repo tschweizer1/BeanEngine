@@ -15,7 +15,8 @@ SpriteRender::~SpriteRender() {
 void SpriteRender::RenderSprites(Camera* camera) {
 	SDL_SetRenderTarget(GameRenderer, targetTexture);
 	for (Sprite* s : *spriteList) {
-		if (camera->containsSprite(s->getRect())) {
+		if (camera->containsSprite(s->getRect())){
+			//Render texture renders a texture obv, it uses GameRenderer to take the sprite texture (s) and render NULL amount (null means full texture)
 			SDL_RenderTexture(GameRenderer, s->getTexture(), NULL, s->getRect());
 		}
 	}

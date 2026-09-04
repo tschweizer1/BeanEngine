@@ -18,6 +18,10 @@ Camera::~Camera() {
 void Camera::moveCamera(float x, float y) {
 	copyRect->x += x;
 	copyRect->y += y;
+	if (copyRect->x < 0.0f) copyRect->x = 0.0f;
+	if (copyRect->y < 0.0f) copyRect->y = 0.0f;
+	if (copyRect->x + copyRect->w > TEXTURE_WIDTH) copyRect->x = TEXTURE_WIDTH - copyRect->w;
+	if (copyRect->y + copyRect->h > TEXTURE_HEIGHT) copyRect->y = TEXTURE_HEIGHT - copyRect->h;
 }
 
 bool Camera::containsSprite(SDL_FRect* spriteRect) {
