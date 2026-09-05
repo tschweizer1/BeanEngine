@@ -2,7 +2,7 @@
 #include <fstream>
 
 
-Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y) {
+Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y) : filename(FileNameIn), spriteTexture(NULL), spriteRect{ 0, 0, 0.0f ,0.0f }, layer(0) {
 	filename = FileNameIn;
     SDL_Surface* loadedSurface = IMG_Load(Sprite::filename.c_str());
     if (!loadedSurface) {
@@ -28,7 +28,7 @@ Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y)
     layer = 0;
     SDL_DestroySurface(loadedSurface);
 }
-Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y, int layer) {
+Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y, int layer) : filename(FileNameIn), spriteTexture(NULL), spriteRect{ 0, 0, 0.0f ,0.0f }, layer(layer) {
     filename = FileNameIn;
     SDL_Surface* loadedSurface = IMG_Load(Sprite::filename.c_str());
     if (!loadedSurface) {
