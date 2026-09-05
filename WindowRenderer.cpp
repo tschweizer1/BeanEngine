@@ -13,7 +13,7 @@ Sprite* ball3;
 SpriteRender* SpriteRenderer;
 Camera* camera;
 SDL_FRect* cameraBounds;
-SDL_Rect* screenBounds;
+SDL_Rect screenBounds;
 
 
 
@@ -35,9 +35,9 @@ bool update()
     char* pix;
     int pitch;
     
-    screenBounds->x = cameraBounds->x;
-    screenBounds->y = cameraBounds->y;
-    SDL_LockTexture(GameTexture, screenBounds, (void**)&pix, &pitch);
+    screenBounds.x = cameraBounds->x;
+    screenBounds.y = cameraBounds->y;
+    SDL_LockTexture(GameTexture, &screenBounds, (void**)&pix, &pitch);
     for (int i = 0, sp = 0, dp = 0; i < cameraBounds->h; i++, dp += cameraBounds->w, sp += pitch)
         memcpy(pix + sp, gFrameBuffer + dp, cameraBounds->w * 4);
 
@@ -54,9 +54,9 @@ void init()
 {
     camera = new Camera(GameTexture);
     cameraBounds = camera->getRect();
-    screenBounds = new SDL_Rect();
-    screenBounds->w = cameraBounds->w;
-    screenBounds->h = cameraBounds->h;
+    screenBounds = SDL_Rect();
+    screenBounds.w = cameraBounds->w;
+    screenBounds.h = cameraBounds->h;
     int width = cameraBounds->w;
     int i, j;
     for (i = cameraBounds->y; i < cameraBounds->y + cameraBounds->h; i++)
@@ -73,13 +73,13 @@ void init()
     SpriteRenderer->addSpriteToRender(ball2);
     ball3 = new Sprite("ball3.png", GameRenderer, 500, 200, 0);
     SpriteRenderer->addSpriteToRender(ball3);
-    std::cout << "bello" << std::endl;
 }
 
 void render(Uint64 aTicks)
 {
+    //ball->MoveSprite(1, 1);
+    //ball2->MoveSprite(2, 2);
     camera->moveCamera(1, 1);
-    ball->MoveSprite(1, 1);
 }
 
 void loop()
@@ -104,14 +104,11 @@ int main(int argc, char** argv)
     }
 
     gFrameBuffer = new int[TEXTURE_WIDTH * TEXTURE_HEIGHT];
-    
-    if (!GameTexture) {
-        std::cout << "no renderer" << std::endl;
-        return -1;
-    }
-    if (!gFrameBuffer || !GameWindow || !GameRenderer || !GameTexture)
+    if (!gFrameBuffer || !GameWindow || !GameRenderer || !GameTexture) {
         std::cout << "failure to create something important (texture, renderer, etc)" << std::endl;
         return -1;
+    }
+        
     init();
     Done = 0;
 
@@ -119,7 +116,6 @@ int main(int argc, char** argv)
         loop();
     }
     delete camera;
-    delete screenBounds;
     delete SpriteRenderer;
     Quit();
 

@@ -2,7 +2,7 @@
 
 Camera::Camera(SDL_Texture* texture) {
 	targetTexture = texture;
-	copyRect = new SDL_FRect{
+	copyRect = SDL_FRect{
 		0,
 		0,
 		WINDOW_WIDTH,
@@ -12,39 +12,35 @@ Camera::Camera(SDL_Texture* texture) {
 }
 
 Camera::~Camera() {
-	delete copyRect;
+
 }
 
 void Camera::moveCamera(float x, float y) {
-	copyRect->x += x;
-	copyRect->y += y;
-	if (copyRect->x < 0.0f) copyRect->x = 0.0f;
-	if (copyRect->y < 0.0f) copyRect->y = 0.0f;
-	if (copyRect->x + copyRect->w > TEXTURE_WIDTH) copyRect->x = TEXTURE_WIDTH - copyRect->w;
-	if (copyRect->y + copyRect->h > TEXTURE_HEIGHT) copyRect->y = TEXTURE_HEIGHT - copyRect->h;
+	copyRect.x += x;
+	copyRect.y += y;
 }
 
 bool Camera::containsSprite(SDL_FRect* spriteRect) {
 	//x,y coord top left corner of FRect, y and x increase down and right
 	//checks if left side of sprite rectangle is inside the camera rectangle
-	if (spriteRect->x > copyRect->x && spriteRect->x < (copyRect->x + copyRect->w)) {
+	if (spriteRect->x > copyRect.x && spriteRect->x < (copyRect.x + copyRect.w)) {
 		//checks if the top left corner is within the camera rectangle
-		if (spriteRect->y > copyRect->y && spriteRect->y < (copyRect->y + copyRect->h)) {
+		if (spriteRect->y > copyRect.y && spriteRect->y < (copyRect.y + copyRect.h)) {
 			return true;
 		}
 		//checks if the bottom left corner is within the camera rectangle
-		if ((spriteRect->y + spriteRect->h) > copyRect->y && (spriteRect->y + spriteRect->h) < (copyRect->y + copyRect->h)) {
+		if ((spriteRect->y + spriteRect->h) > copyRect.y && (spriteRect->y + spriteRect->h) < (copyRect.y + copyRect.h)) {
 			return true;
 		}
 	}
 	//checks if the right side of the rectangle is inside the camera rectangle
-	if ((spriteRect->x + spriteRect->w) > copyRect->x && (spriteRect->x + spriteRect->w) < (copyRect->x + copyRect->w)) {
+	if ((spriteRect->x + spriteRect->w) > copyRect.x && (spriteRect->x + spriteRect->w) < (copyRect.x + copyRect.w)) {
 		//checks if the top right corner is within the camera rectangle
-		if (spriteRect->y > copyRect->y && spriteRect->y < (copyRect->y + copyRect->h)) {
+		if (spriteRect->y > copyRect.y && spriteRect->y < (copyRect.y + copyRect.h)) {
 			return true;
 		}
 		//checks if the bottom right corner is within the camera rectangle
-		if ((spriteRect->y + spriteRect->h) > copyRect->y && (spriteRect->y + spriteRect->h) < (copyRect->y + copyRect->h)) {
+		if ((spriteRect->y + spriteRect->h) > copyRect.y && (spriteRect->y + spriteRect->h) < (copyRect.y + copyRect.h)) {
 			return true;
 		}
 	}
@@ -53,10 +49,5 @@ bool Camera::containsSprite(SDL_FRect* spriteRect) {
 }
 
 SDL_FRect* Camera::getRect() {
-	return copyRect;
-}
-
-void Camera::renderCameraView() {
-	SDL_SetRenderTarget(GameRenderer, NULL);
-	SDL_RenderTexture(GameRenderer, targetTexture, copyRect, NULL);
+	return &copyRect;
 }

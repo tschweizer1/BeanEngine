@@ -2,26 +2,24 @@
 #include <fstream>
 
 
-Sprite::Sprite() {
-
-}
 Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y) {
-
 	filename = FileNameIn;
     SDL_Surface* loadedSurface = IMG_Load(Sprite::filename.c_str());
     if (!loadedSurface) {
+        std::cout << SDL_GetError() << std::endl;
         std::cout << "Failed to load sprite!" << std::endl;
         Quit();
         return;
     }
     spriteTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
     if (!spriteTexture) {
+        std::cout << SDL_GetError() << std::endl;
         std::cout << "Failed to create texture!" << std::endl;
         SDL_DestroySurface(loadedSurface);
         Quit();
         return;
     }
-    spriteRect = new SDL_FRect{
+    spriteRect = SDL_FRect{
     x,
     y,
     static_cast<float>(loadedSurface->w),
@@ -34,18 +32,20 @@ Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y,
     filename = FileNameIn;
     SDL_Surface* loadedSurface = IMG_Load(Sprite::filename.c_str());
     if (!loadedSurface) {
+        std::cout << SDL_GetError() << std::endl;
         std::cout << "Failed to load sprite!" << std::endl;
         Quit();
         return;
     }
     spriteTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
     if (!spriteTexture) {
+        std::cout << SDL_GetError() << std::endl;
         std::cout << "Failed to create texture!" << std::endl;
         SDL_DestroySurface(loadedSurface);
         Quit();
         return;
     }
-    spriteRect = new SDL_FRect{
+    spriteRect = SDL_FRect{
     x,
     y,
     static_cast<float>(loadedSurface->w),
@@ -55,7 +55,6 @@ Sprite::Sprite(std::string FileNameIn, SDL_Renderer* renderer, float x, float y,
     SDL_DestroySurface(loadedSurface);
 }
 Sprite::~Sprite() {
-    delete spriteRect;
     SDL_DestroyTexture(spriteTexture);
 }
 std::string Sprite::toString() {
@@ -65,26 +64,18 @@ void Sprite::LoadSprite() {
     
 }
 void Sprite::MoveSprite(float x, float y) {
-    spriteRect->x += x;
-    spriteRect->y += y;
-    if (spriteRect->x < 0.0f) spriteRect->x = 0.0f;
-    if (spriteRect->y < 0.0f) spriteRect->y = 0.0f;
-    if (spriteRect->x + spriteRect->w > TEXTURE_WIDTH) spriteRect->x = TEXTURE_WIDTH - spriteRect->w;
-    if (spriteRect->y + spriteRect->h > TEXTURE_HEIGHT) spriteRect->y = TEXTURE_HEIGHT - spriteRect->h;
+    spriteRect.x += x;
+    spriteRect.y += y;
 }
 void Sprite::SetSpritePosition(float x, float y) {
-    spriteRect->x = x;
-    spriteRect->y = y;
-    if (spriteRect->x < 0.0f) spriteRect->x = 0.0f;
-    if (spriteRect->y < 0.0f) spriteRect->y = 0.0f;
-    if (spriteRect->x + spriteRect->w > TEXTURE_WIDTH) spriteRect->x = TEXTURE_WIDTH - spriteRect->w;
-    if (spriteRect->y + spriteRect->h > TEXTURE_HEIGHT) spriteRect->y = TEXTURE_HEIGHT - spriteRect->h;
+    spriteRect.x = x;
+    spriteRect.y = y;
 }
 SDL_Texture* Sprite::getTexture() {
     return spriteTexture;
 }
 SDL_FRect* Sprite::getRect() {
-    return spriteRect;
+    return &spriteRect;
 }
 int Sprite::getLayer() {
     return layer;

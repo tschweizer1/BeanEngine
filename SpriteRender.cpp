@@ -5,7 +5,6 @@ SpriteRender::SpriteRender(SDL_Texture* texture) {
 	targetTexture = texture;
 }
 SpriteRender::~SpriteRender() {
-
 	for (Sprite* s : *spriteList) {
 		delete s;
 	}
@@ -13,15 +12,15 @@ SpriteRender::~SpriteRender() {
 }
 
 void SpriteRender::RenderSprites(Camera* camera) {
-	SDL_SetRenderTarget(GameRenderer, targetTexture);
 	for (Sprite* s : *spriteList) {
 		if (camera->containsSprite(s->getRect())){
-			//Render texture renders a texture obv, it uses GameRenderer to take the sprite texture (s) and render NULL amount (null means full texture)
-			SDL_RenderTexture(GameRenderer, s->getTexture(), NULL, s->getRect());
+			SDL_FRect placement = SDL_FRect{ s->getRect()->x - camera->getRect()->x, s->getRect()->y - camera->getRect()->y, s->getRect()->w, s->getRect()->h };
+			if (!SDL_RenderTexture(GameRenderer, s->getTexture(), NULL, &placement)) {
+				std::cout << SDL_GetError() << std::endl;
+				std::cout << "sprites failing to render " << s->toString() << " Rect: " << placement.x << ", " << placement.y << ", " << placement.w << ", " << placement.h << std::endl;
+			}
 		}
 	}
-	SDL_SetRenderTarget(GameRenderer, NULL);
-	camera->renderCameraView();
 }
 
 void SpriteRender::addSpriteToRender(Sprite* s) {
