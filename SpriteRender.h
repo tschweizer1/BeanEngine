@@ -1,6 +1,7 @@
 #ifndef SPRITERENDERER_H
 #define SPRITERENDERER_H
 #include "Sprite.h"
+#include "PhysicsSprite.h"
 #include "Camera.h"
 #include <list>
 #include <iostream>

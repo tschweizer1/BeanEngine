@@ -7,11 +7,14 @@ const int WINDOW_HEIGHT = 1080 / 2;
 const int TEXTURE_WIDTH = 1920/2;
 const int TEXTURE_HEIGHT = 1080/2;
 const double FPS = 60;
+extern float DeltaTime;
+extern Uint64 lastTime;
 static int Done;
 extern SDL_Window* GameWindow;
 extern SDL_Renderer* GameRenderer;
 extern SDL_Texture* GameTexture;
 extern void Quit();
+extern void Update();
 
 #endif
 ;
