@@ -3,11 +3,10 @@
 #include <stdlib.h>
 #include "SDL3/SDL_main.h"
 #include "SDL3_image/SDL_image.h"
-#include "Sprite.h"
 #include "SpriteRender.h"
 int* gFrameBuffer;
 int* gTempBuffer;
-Sprite* ball;
+PhysicsSprite* ball;
 Sprite* ball2;
 Sprite* ball3;
 SpriteRender* SpriteRenderer;
@@ -20,6 +19,7 @@ SDL_Rect screenBounds;
 //checks if the user or event to quit has been triggered to end the loop, if still active locks the texture and renders in the new one
 bool update()
 {
+    Update();
     SDL_Event e;
     if (Done == 1 || SDL_PollEvent(&e))
     {
@@ -43,6 +43,7 @@ bool update()
 
     SDL_UnlockTexture(GameTexture);
     SDL_RenderTexture(GameRenderer, GameTexture, NULL, NULL);
+    ball->update();
     SpriteRenderer->RenderSprites(camera);
     SDL_RenderPresent(GameRenderer);
     SDL_Delay(1000/FPS);
@@ -67,7 +68,7 @@ void init()
         }
     }
     SpriteRenderer = new SpriteRender(GameTexture);
-    ball = new Sprite("ball.png", GameRenderer, 100, 100, 0);
+    ball = new PhysicsSprite("ball.png", GameRenderer, 100, 100, 0);
     SpriteRenderer->addSpriteToRender(ball);
     ball2 = new Sprite("ball2.png", GameRenderer, 500, 200, 1);
     SpriteRenderer->addSpriteToRender(ball2);
@@ -79,7 +80,6 @@ void render(Uint64 aTicks)
 {
     //ball->MoveSprite(1, 1);
     //ball2->MoveSprite(2, 2);
-    camera->moveCamera(1, 1);
 }
 
 void loop()

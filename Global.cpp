@@ -4,7 +4,16 @@
 SDL_Window* GameWindow = SDL_CreateWindow("How peculiar", WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 SDL_Renderer* GameRenderer = SDL_CreateRenderer(GameWindow, NULL);
 SDL_Texture* GameTexture = SDL_CreateTexture(GameRenderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+float DeltaTime = 0.0f;
+Uint64 lastTime = SDL_GetPerformanceCounter();
 
+
+void Update() { 
+    //gives the real seconds between each frame
+    Uint64 currentTime = SDL_GetPerformanceCounter();
+    DeltaTime = (currentTime - lastTime) / (float) SDL_GetPerformanceFrequency();
+    lastTime = currentTime;
+}
 void Quit() {
     std::cout << "Quitting" << std::endl;
     SDL_DestroyTexture(GameTexture);

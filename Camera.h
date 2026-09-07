@@ -1,3 +1,6 @@
+#ifndef CAMERA_H
+#define CAMERA_H
+
 #include "Global.h"
 #include <iostream>
 
@@ -11,4 +14,6 @@ public:
 private:
 	SDL_FRect copyRect;
 	SDL_Texture* targetTexture;
-};
+} 
+#endif
+;
